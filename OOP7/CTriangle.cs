@@ -13,8 +13,18 @@ namespace OOP7
 {
     class CTriangle: Object
     {
+        public CTriangle()
+        {
+            id = ID;
+            ++ID;
+            code = 'T';
+            createShape();
+        }
         public CTriangle(int x, int y, RectangleF circuit, Color color)
         {
+            id = ID;
+            ++ID;
+            code = 'T';
             this.x = x;
             this.y = y;
             this.circuit = circuit;
@@ -35,6 +45,10 @@ namespace OOP7
             myPath.AddPolygon(point);
         }
 
+        ~CTriangle()
+        {
+            --ID;
+        }
      
     }
 }

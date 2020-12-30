@@ -37,6 +37,8 @@
             this.GreenBt = new System.Windows.Forms.Button();
             this.group = new System.Windows.Forms.Button();
             this.UnGroup = new System.Windows.Forms.Button();
+            this.Save = new System.Windows.Forms.Button();
+            this.Load = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.sheet)).BeginInit();
             this.SuspendLayout();
             // 
@@ -142,11 +144,35 @@
             this.UnGroup.UseVisualStyleBackColor = true;
             this.UnGroup.Click += new System.EventHandler(this.UnGroup_Click);
             // 
+            // Save
+            // 
+            this.Save.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.Save.Location = new System.Drawing.Point(1111, 370);
+            this.Save.Name = "Save";
+            this.Save.Size = new System.Drawing.Size(80, 45);
+            this.Save.TabIndex = 9;
+            this.Save.Text = "Сохранить";
+            this.Save.UseVisualStyleBackColor = true;
+            this.Save.Click += new System.EventHandler(this.Save_Click);
+            // 
+            // Load
+            // 
+            this.Load.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.Load.Location = new System.Drawing.Point(1111, 422);
+            this.Load.Name = "Load";
+            this.Load.Size = new System.Drawing.Size(80, 45);
+            this.Load.TabIndex = 10;
+            this.Load.Text = "Загрузить";
+            this.Load.UseVisualStyleBackColor = true;
+            this.Load.Click += new System.EventHandler(this.Load_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1214, 549);
+            this.Controls.Add(this.Load);
+            this.Controls.Add(this.Save);
             this.Controls.Add(this.UnGroup);
             this.Controls.Add(this.group);
             this.Controls.Add(this.GreenBt);
@@ -179,6 +205,8 @@
         private System.Windows.Forms.Button GreenBt;
         private System.Windows.Forms.Button group;
         private System.Windows.Forms.Button UnGroup;
+        private System.Windows.Forms.Button Save;
+        private System.Windows.Forms.Button Load;
     }
 }
 

@@ -8,10 +8,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing.Drawing2D;
+using System.IO;
 
 namespace OOP7
 {
-    public  abstract class Object
+    public  abstract class Object: ISerializable
     {
         public int x;
         public int y;
@@ -22,6 +23,10 @@ namespace OOP7
         protected Color color;
         Pen redpen = new Pen(Color.Red);
         protected bool selected = false;
+
+        protected int id;
+        protected char code;
+        public static int ID = 0;
 
         public virtual void DrawShape(Graphics G)
         {
@@ -56,28 +61,26 @@ namespace OOP7
 
         public virtual void outOfBounds()
         {
-            while (!CheckCircuit())
+            if (flag == false)
             {
-                RectangleF ShapeCircuit = myPath.GetBounds();
-                PointF LeftTop = ShapeCircuit.Location;
-                PointF RightTop = new PointF(ShapeCircuit.Right, ShapeCircuit.Top);
-                PointF LeftBottom = new PointF(ShapeCircuit.Left, ShapeCircuit.Bottom);
-                PointF RightBottom = new PointF(ShapeCircuit.Right, ShapeCircuit.Bottom);
-                if (!circuit.Contains(LeftTop) && !circuit.Contains(LeftBottom))
-                    ++x;
-                if (!circuit.Contains(LeftTop) && !circuit.Contains(RightTop))
-                    ++y;
-                if (!circuit.Contains(RightTop) && !circuit.Contains(RightBottom))
-                    --x;
-                if (!circuit.Contains(LeftBottom) && !circuit.Contains(RightBottom))
-                    --y;
-                createShape();
+                while (!CheckCircuit())
+                {
+                    RectangleF ShapeCircuit = myPath.GetBounds();
+                    PointF LeftTop = ShapeCircuit.Location;
+                    PointF RightTop = new PointF(ShapeCircuit.Right, ShapeCircuit.Top);
+                    PointF LeftBottom = new PointF(ShapeCircuit.Left, ShapeCircuit.Bottom);
+                    PointF RightBottom = new PointF(ShapeCircuit.Right, ShapeCircuit.Bottom);
+                    if (!circuit.Contains(LeftTop) && !circuit.Contains(LeftBottom))
+                        ++x;
+                    if (!circuit.Contains(LeftTop) && !circuit.Contains(RightTop))
+                        ++y;
+                    if (!circuit.Contains(RightTop) && !circuit.Contains(RightBottom))
+                        --x;
+                    if (!circuit.Contains(LeftBottom) && !circuit.Contains(RightBottom))
+                        --y;
+                    createShape();
+                }
             }
-        }
-
-        public virtual void setRectangleF(RectangleF value)
-        {
-            circuit = value;
         }
 
         public virtual void ChangeColor(Color color)
@@ -99,10 +102,12 @@ namespace OOP7
         {
             flag = value;
         }
-
         
+        public virtual void setRectangleF(RectangleF value)
+        {
+            circuit = value;
+        }
 
-        
         public virtual bool CheckCircuit()
         {
             return circuit.Contains(myPath.GetBounds());
@@ -116,8 +121,78 @@ namespace OOP7
         {
             return myPath;
         }
+        
+        public virtual void save(StreamWriter writer)
+        {
+            writer.WriteLine(code);
+            writingCommonParams(writer);
+        }
 
-        public virtual void createGroupRectF() { }
-       
+        public virtual void load(StreamReader reader)
+        {
+            readingCommonParams(reader);
+
+        }
+
+        protected string extractInfo(string line)
+        {
+            string[] parts = line.Split(' ');
+            return parts[1];
+        }
+
+        public void writingCommonParams(StreamWriter writer)
+        {
+            float x = circuit.X;
+            float y = circuit.Y;
+            float height = circuit.Height;
+            float width = circuit.Width;
+
+            writer.WriteLine("RelocateFlag " + flag.ToString());
+            writer.WriteLine("Selected " + selected.ToString());
+            writer.WriteLine("Boarders:");
+            writer.WriteLine("x " + x.ToString());
+            writer.WriteLine("y " + y.ToString());
+            writer.WriteLine("width " + width.ToString());
+            writer.WriteLine("height " + height.ToString());
+            writer.WriteLine("");
+            writer.WriteLine("OValue " + OValue.ToString());
+            writer.WriteLine("xShape " + this.x.ToString());
+            writer.WriteLine("yShape " + this.y.ToString());
+            writer.WriteLine("color " + color);
+        }
+
+        public void readingCommonParams(StreamReader reader)
+        {
+            flag = bool.Parse(extractInfo(reader.ReadLine()));
+            selected = bool.Parse(extractInfo(reader.ReadLine()));
+            reader.ReadLine();
+            float x = float.Parse(extractInfo(reader.ReadLine()));
+            float y = float.Parse(extractInfo(reader.ReadLine()));
+            float width = float.Parse(extractInfo(reader.ReadLine()));
+            float height = float.Parse(extractInfo(reader.ReadLine()));
+            circuit = new RectangleF(x, y, width, height);
+            reader.ReadLine();
+            OValue = int.Parse(extractInfo(reader.ReadLine()));
+            this.x = int.Parse(extractInfo(reader.ReadLine()));
+            this.y = int.Parse(extractInfo(reader.ReadLine()));
+            switch (extractInfo(reader.ReadLine()))
+            {
+                case "Yellow":
+                    {
+                        color = Color.Yellow;
+                        break;
+                    }
+                case "Blue":
+                    {
+                        color = Color.Blue;
+                        break;
+                    }
+                case "Green":
+                    {
+                        color = Color.Green;
+                        break;
+                    }
+            }
+        }
     }
 }

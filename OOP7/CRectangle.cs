@@ -12,8 +12,19 @@ namespace OOP7
 {
     class CRectangle: Object
     {
+        public CRectangle()
+        {
+            id = ID;
+            ++ID;
+            code = 'R';
+            createShape();
+        }
+
         public CRectangle(int x, int y, RectangleF circuit, Color color)
         {
+            id = ID;
+            ++ID;
+            code = 'R';
             this.x = x;
             this.y = y;
             this.circuit = circuit;
@@ -27,6 +38,11 @@ namespace OOP7
             myPath.Reset();
             Rectangle PathRec = new Rectangle(x - OValue / 2, y - OValue / 2, OValue, OValue);
             myPath.AddRectangle(PathRec);
+        }
+
+        ~CRectangle()
+        {
+            --ID;
         }
     }
 }

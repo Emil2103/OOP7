@@ -12,8 +12,19 @@ namespace OOP7
 {
     class CCircle: Object
     {
+        public CCircle()
+        {
+            id = ID;
+            ++ID;
+            code = 'C';
+            createShape();
+        }
+
         public CCircle(int x, int y, RectangleF circuit, Color color)
         {
+            id = ID;
+            ++ID;
+            code = 'C';
             this.x = x;
             this.y = y;
             this.circuit = circuit;
@@ -29,5 +40,9 @@ namespace OOP7
             myPath.AddEllipse(PathRec);
         }
 
+        ~CCircle()
+        {
+            --ID;
+        }
     }
 }

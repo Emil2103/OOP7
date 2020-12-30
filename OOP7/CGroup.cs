@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing.Drawing2D;
+using System.IO;
 
 namespace OOP7
 {
@@ -17,8 +18,19 @@ namespace OOP7
         protected int count;
         public Object[] _object;
 
+        public CGroup()
+        {
+            id = ID;
+            ++ID;
+            code = 'G';
+            createShape();
+        }
+
         public CGroup(int maxcount)
         {
+            id = ID;
+            ++ID;
+            code = 'G';
             this.maxcount = maxcount;
             count = 0;
             _object = new Object[maxcount];
@@ -31,6 +43,7 @@ namespace OOP7
             for (int i = 0; i < maxcount; i++)
                 _object[i] = null;
             _object = null;
+            --ID;
         }
 
         public bool addShape(Object obj)
@@ -63,8 +76,7 @@ namespace OOP7
                 if(_object[i] != null)
                     _object[i].Move(dx, dy);
             }
-            if(flag)
-                outOfBounds();
+            outOfBounds();
         }
 
         public override void ObjSize(int dx)
@@ -74,8 +86,7 @@ namespace OOP7
                 if(_object[i] != null)
                     _object[i].ObjSize(dx);
             }
-            if(flag)
-                outOfBounds();
+            outOfBounds();
         }
 
         public override bool Popal(int x, int y)
@@ -108,21 +119,24 @@ namespace OOP7
         
         public override void outOfBounds()
         {
-            while (!CheckCircuit())
+            if (flag == false)
             {
-                RectangleF Rec = myPath.GetBounds();
-                PointF LeftTop = Rec.Location;
-                PointF RightTop = new PointF(Rec.Right, Rec.Top);
-                PointF LeftBottom = new PointF(Rec.Left, Rec.Bottom);
-                PointF RightBottom = new PointF(Rec.Right, Rec.Bottom);
-                if (!circuit.Contains(LeftTop) && !circuit.Contains(LeftBottom))
-                    Move(1, 0);
-                if (!circuit.Contains(LeftTop) && !circuit.Contains(RightTop))
-                    Move(0, 1);
-                if (!circuit.Contains(RightTop) && !circuit.Contains(RightBottom))
-                    Move(-1, 0);
-                if (!circuit.Contains(LeftBottom) && !circuit.Contains(RightBottom))
-                    Move(0, -1);
+                while (!CheckCircuit())
+                {
+                    RectangleF Rec = myPath.GetBounds();
+                    PointF LeftTop = Rec.Location;
+                    PointF RightTop = new PointF(Rec.Right, Rec.Top);
+                    PointF LeftBottom = new PointF(Rec.Left, Rec.Bottom);
+                    PointF RightBottom = new PointF(Rec.Right, Rec.Bottom);
+                    if (!circuit.Contains(LeftTop) && !circuit.Contains(LeftBottom))
+                        Move(1, 0);
+                    if (!circuit.Contains(LeftTop) && !circuit.Contains(RightTop))
+                        Move(0, 1);
+                    if (!circuit.Contains(RightTop) && !circuit.Contains(RightBottom))
+                        Move(-1, 0);
+                    if (!circuit.Contains(LeftBottom) && !circuit.Contains(RightBottom))
+                        Move(0, -1);
+                }
             }
         }
 
@@ -162,6 +176,26 @@ namespace OOP7
           
         }
 
-        
+        public override void save(StreamWriter writer)
+        {
+            writer.WriteLine(code);
+            writer.WriteLine("maxcount" + maxcount.ToString());
+            writer.WriteLine("count" + count.ToString());
+            writer.WriteLine("Flag" + flag.ToString());
+            for (int i = 0; i < count; ++i)
+                _object[i].save(writer);
+            writer.WriteLine();
+        }
+
+        public void loadGroup(StreamReader reader, ObjectFactory factory)
+        {
+            maxcount = int.Parse(extractInfo(reader.ReadLine()));
+            count = int.Parse(extractInfo(reader.ReadLine()));
+            flag = bool.Parse(extractInfo(reader.ReadLine()));
+            for(int i = 0; i < count; i++)
+                _object[i].loadShapes(reader, factory);
+            for(int i =0; i < count; ++i)
+                this.circuit = _object[i].getCircuit();
+        }
     }
 }

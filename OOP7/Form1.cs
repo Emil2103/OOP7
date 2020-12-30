@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 
 namespace OOP7
 {
@@ -24,7 +25,8 @@ namespace OOP7
         public int c; //выбор цвета
         public int dx = 0;
         public int dy = 0;
-
+        string pathToTheFileOfShapes = @"C:\Users\emil-\source\repos\OOP7\Save.txt";
+        string pathToTheFileOfFormsParams = @"C:\Users\emil-\source\repos\OOP7\FormsParams.txt";
         public Form1()
         {
             InitializeComponent();
@@ -309,7 +311,7 @@ namespace OOP7
                     shapes.obj = ((CGroup)S.obj[i]).Ungroup();
                     for(int j = 0; j < shapes.getsize(); j++)
                     {
-                        DLCgroup.addObject(shapes.obj[i]);
+                        DLCgroup.addObject(shapes.obj[j]);
                     }
                     S.deleteObject(i);
                 }
@@ -318,9 +320,61 @@ namespace OOP7
             {
                 S.addObject(DLCgroup.obj[i]);
             }
-            this.Invalidate();
+            
         }
 
+        public virtual void save(StreamWriter writer)
+        {
+            writer.WriteLine(this.Width.ToString());
+            writer.WriteLine(this.Height.ToString());
+            writer.WriteLine(color);
+        }
 
+        public virtual void load(StreamReader reader)
+        {
+            this.Width = int.Parse(reader.ReadLine());
+            this.Height = int.Parse(reader.ReadLine());
+
+            switch (reader.ReadLine())
+            {
+                case "Yellow":
+                    {
+                        color = Color.Yellow;
+                        break;
+                    }
+                case "Blue":
+                    {
+                        color = Color.Blue;
+                        break;
+                    }
+                case "Green":
+                    {
+                        color = Color.Green;
+                        break;
+                    }
+            }
+        }
+
+        private void Save_Click(object sender, EventArgs e)
+        {
+            S.SaveObject(pathToTheFileOfShapes);
+            using (StreamWriter writer = new StreamWriter(pathToTheFileOfFormsParams, false, System.Text.Encoding.Default))
+            {
+                this.save(writer);
+            }
+        }
+
+        private void Load_Click(object sender, EventArgs e)
+        {
+            using (StreamReader reader = new StreamReader(pathToTheFileOfFormsParams, System.Text.Encoding.Default))
+            {
+                this.load(reader);
+            }
+
+            ObjectFactory factory = new MyObjectFactory();
+            S = new Storage(100);
+            S.loadShapes(pathToTheFileOfShapes, factory);
+            this.Invalidate();
+        }
     }
 }

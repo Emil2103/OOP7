@@ -131,7 +131,7 @@ namespace OOP7
         public virtual void load(StreamReader reader)
         {
             readingCommonParams(reader);
-
+            createShape();
         }
 
         protected string extractInfo(string line)
@@ -158,7 +158,9 @@ namespace OOP7
             writer.WriteLine("OValue " + OValue.ToString());
             writer.WriteLine("xShape " + this.x.ToString());
             writer.WriteLine("yShape " + this.y.ToString());
-            writer.WriteLine("color " + color);
+            string col = color.ToString().Substring(7);
+            col = col.Remove(col.Length - 1);
+            writer.WriteLine("color " + col);
         }
 
         public void readingCommonParams(StreamReader reader)
@@ -187,12 +189,13 @@ namespace OOP7
                         color = Color.Blue;
                         break;
                     }
-                case "Green":
+                case "Black":
                     {
-                        color = Color.Green;
+                        color = Color.Black;
                         break;
                     }
             }
+           
         }
     }
 }

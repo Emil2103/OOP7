@@ -64,7 +64,7 @@ namespace OOP7
                         color = Color.Blue;
                         break;
                     case 3:
-                        color = Color.Green;
+                        color = Color.Black;
                         break;
                     default:
                         color = Color.Black;
@@ -263,7 +263,7 @@ namespace OOP7
         {
             YellowBt.Enabled = false;
             BlueBt.Enabled = true;
-            GreenBt.Enabled = true;
+            BlackBt.Enabled = true;
             c = 1;
         }
 
@@ -271,13 +271,13 @@ namespace OOP7
         {
             BlueBt.Enabled = false;
             YellowBt.Enabled = true;
-            GreenBt.Enabled = true;
+            BlackBt.Enabled = true;
             c = 2;
         }
 
-        private void GreenBt_Click(object sender, EventArgs e)
+        private void BlackBt_Click(object sender, EventArgs e)
         {
-            GreenBt.Enabled = false;
+            BlackBt.Enabled = false;
             BlueBt.Enabled = true;
             YellowBt.Enabled = true;
             c = 3;
@@ -347,9 +347,9 @@ namespace OOP7
                         color = Color.Blue;
                         break;
                     }
-                case "Green":
+                case "Black":
                     {
-                        color = Color.Green;
+                        color = Color.Black;
                         break;
                     }
             }

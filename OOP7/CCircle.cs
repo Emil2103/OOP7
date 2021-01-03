@@ -17,7 +17,7 @@ namespace OOP7
             id = ID;
             ++ID;
             code = 'C';
-            createShape();
+            
         }
 
         public CCircle(int x, int y, RectangleF circuit, Color color)

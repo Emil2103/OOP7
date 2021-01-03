@@ -34,7 +34,7 @@
             this.DrTr = new System.Windows.Forms.Button();
             this.YellowBt = new System.Windows.Forms.Button();
             this.BlueBt = new System.Windows.Forms.Button();
-            this.GreenBt = new System.Windows.Forms.Button();
+            this.BlackBt = new System.Windows.Forms.Button();
             this.group = new System.Windows.Forms.Button();
             this.UnGroup = new System.Windows.Forms.Button();
             this.Save = new System.Windows.Forms.Button();
@@ -111,16 +111,16 @@
             this.BlueBt.UseVisualStyleBackColor = true;
             this.BlueBt.Click += new System.EventHandler(this.BlueBt_Click);
             // 
-            // GreenBt
+            // BlackBt
             // 
-            this.GreenBt.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.GreenBt.Location = new System.Drawing.Point(1111, 232);
-            this.GreenBt.Name = "GreenBt";
-            this.GreenBt.Size = new System.Drawing.Size(80, 27);
-            this.GreenBt.TabIndex = 6;
-            this.GreenBt.Text = "Зеленый";
-            this.GreenBt.UseVisualStyleBackColor = true;
-            this.GreenBt.Click += new System.EventHandler(this.GreenBt_Click);
+            this.BlackBt.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.BlackBt.Location = new System.Drawing.Point(1111, 232);
+            this.BlackBt.Name = "BlackBt";
+            this.BlackBt.Size = new System.Drawing.Size(80, 27);
+            this.BlackBt.TabIndex = 6;
+            this.BlackBt.Text = "Черный";
+            this.BlackBt.UseVisualStyleBackColor = true;
+            this.BlackBt.Click += new System.EventHandler(this.BlackBt_Click);
             // 
             // group
             // 
@@ -175,7 +175,7 @@
             this.Controls.Add(this.Save);
             this.Controls.Add(this.UnGroup);
             this.Controls.Add(this.group);
-            this.Controls.Add(this.GreenBt);
+            this.Controls.Add(this.BlackBt);
             this.Controls.Add(this.BlueBt);
             this.Controls.Add(this.YellowBt);
             this.Controls.Add(this.DrTr);
@@ -202,7 +202,7 @@
         private System.Windows.Forms.Button DrTr;
         private System.Windows.Forms.Button YellowBt;
         private System.Windows.Forms.Button BlueBt;
-        private System.Windows.Forms.Button GreenBt;
+        private System.Windows.Forms.Button BlackBt;
         private System.Windows.Forms.Button group;
         private System.Windows.Forms.Button UnGroup;
         private System.Windows.Forms.Button Save;

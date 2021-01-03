@@ -16,14 +16,14 @@ namespace OOP7
     {
         protected int maxcount;
         protected int count;
-        public Object[] _object;
+        public Storage Stor;
 
         public CGroup()
         {
             id = ID;
             ++ID;
             code = 'G';
-            createShape();
+            
         }
 
         public CGroup(int maxcount)
@@ -33,16 +33,15 @@ namespace OOP7
             code = 'G';
             this.maxcount = maxcount;
             count = 0;
-            _object = new Object[maxcount];
-            for (int i = 0; i < maxcount; i++)
-                _object[i] = null;
+            Stor = new Storage(maxcount);
+            
               
         }
         ~CGroup()
         {
             for (int i = 0; i < maxcount; i++)
-                _object[i] = null;
-            _object = null;
+                Stor = null;
+            Stor = null;
             --ID;
         }
 
@@ -52,7 +51,7 @@ namespace OOP7
                 return false;
             obj.setFlag(true);
             count++;
-            _object[count - 1] = obj;
+            Stor.obj[count - 1] = obj;
             return true;
         }
         public override void createShape() { }
@@ -62,8 +61,7 @@ namespace OOP7
             
                 for (int i = 0; i < count; i++)
                 {
-                    if (_object[i] != null)
-                        _object[i].DrawShape(G);
+                        Stor.obj[i].DrawShape(G);
                 }
             
         }
@@ -73,8 +71,7 @@ namespace OOP7
             
             for (int i = 0; i < count; i++)
             {
-                if(_object[i] != null)
-                    _object[i].Move(dx, dy);
+                    Stor.obj[i].Move(dx, dy);
             }
             outOfBounds();
         }
@@ -83,8 +80,7 @@ namespace OOP7
         {
             for (int i = 0; i < count; i++)
             {
-                if(_object[i] != null)
-                    _object[i].ObjSize(dx);
+                    Stor.obj[i].ObjSize(dx);
             }
             outOfBounds();
         }
@@ -93,7 +89,7 @@ namespace OOP7
         {
             for(int i = 0; i < count; i++)
             {
-                if (_object[i]!=null && _object[i].Popal(x, y))
+                if (Stor.obj[i].Popal(x, y))
                 {
                     return true;
                 }   
@@ -106,15 +102,15 @@ namespace OOP7
             selected = a;
             for (int i = 0; i < count; i++)
             {
-                if(_object[i] != null)
-                    _object[i].setSelect(a);
+                if(Stor.obj[i] != null)
+                    Stor.obj[i].setSelect(a);
             }
         }
 
         public override void ChangeColor(Color color)
         {
             for (int i = 0; i < count; i++)
-                _object[i].ChangeColor(color);
+                Stor.obj[i].ChangeColor(color);
         }
         
         public override void outOfBounds()
@@ -144,9 +140,9 @@ namespace OOP7
         {
             for(int i = 0; i < count; i++)
             {
-                if (_object[i]!=null && !_object[i].CheckCircuit())
+                if (!Stor.obj[i].CheckCircuit())
                 {
-                    myPath = _object[i].getPath();
+                    myPath = Stor.obj[i].getPath();
                     return false;
                 }
             }
@@ -157,8 +153,7 @@ namespace OOP7
             circuit = value;
             for(int i =0; i < count; i++)
             {
-                if(_object[i] != null)
-                    _object[i].setRectangleF(value);
+                Stor.obj[i].setRectangleF(value);
             }
         }
 
@@ -166,36 +161,33 @@ namespace OOP7
         {
             for(int i = 0; i < count; i++)
             {
-                if (_object[i] != null)
-                {
-                    _object[i].setFlag(false);
-                }
+                Stor.obj[i].setFlag(false);
             }
             
-            return _object;
+            return Stor.obj;
           
         }
 
         public override void save(StreamWriter writer)
         {
             writer.WriteLine(code);
-            writer.WriteLine("maxcount" + maxcount.ToString());
-            writer.WriteLine("count" + count.ToString());
-            writer.WriteLine("Flag" + flag.ToString());
+            writer.WriteLine("maxcount " + maxcount.ToString());
+            writer.WriteLine("count " + count.ToString());
+            writer.WriteLine("Flag " + flag.ToString());
             for (int i = 0; i < count; ++i)
-                _object[i].save(writer);
+                Stor.obj[i].save(writer);
             writer.WriteLine();
         }
 
         public void loadGroup(StreamReader reader, ObjectFactory factory)
         {
             maxcount = int.Parse(extractInfo(reader.ReadLine()));
+            Stor = new Storage(maxcount);
             count = int.Parse(extractInfo(reader.ReadLine()));
             flag = bool.Parse(extractInfo(reader.ReadLine()));
-            for(int i = 0; i < count; i++)
-                _object[i].loadShapes(reader, factory);
+            Stor.loadShapes(reader, factory);
             for(int i =0; i < count; ++i)
-                this.circuit = _object[i].getCircuit();
+                this.circuit = Stor.obj[i].getCircuit();
         }
     }
 }

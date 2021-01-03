@@ -18,7 +18,7 @@ namespace OOP7
             id = ID;
             ++ID;
             code = 'T';
-            createShape();
+            
         }
         public CTriangle(int x, int y, RectangleF circuit, Color color)
         {

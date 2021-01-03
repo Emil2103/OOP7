@@ -12,6 +12,9 @@ namespace OOP7
         public int count;
         public int size;
         public Object[] obj;
+
+       
+
         public Storage(int size)
         {
             this.size = size;
@@ -68,6 +71,7 @@ namespace OOP7
             return size;
         }
 
+      
         public void SaveObject(string pathToTheFile)
         {
             if(count != 0)
@@ -76,7 +80,8 @@ namespace OOP7
                 {
                     for(int i = 0; i <  count; i++)
                     {
-                        obj[i].save(writer);
+                        if(obj[i] != null)
+                            obj[i].save(writer);
                     }
                 }
             }
@@ -114,6 +119,7 @@ namespace OOP7
             using (StreamReader reader = new StreamReader(pathToTheFile, System.Text.Encoding.Default))
             {
                 readingShapes(reader, factory);
+                
             }
         }
 

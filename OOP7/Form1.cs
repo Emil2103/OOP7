@@ -25,8 +25,8 @@ namespace OOP7
         public int c; //выбор цвета
         public int dx = 0;
         public int dy = 0;
-        string pathToTheFileOfShapes = @"C:\Users\emil-\source\repos\OOP7\Save.txt";
-        string pathToTheFileOfFormsParams = @"C:\Users\emil-\source\repos\OOP7\FormsParams.txt";
+        
+
         public Form1()
         {
             InitializeComponent();
@@ -35,7 +35,8 @@ namespace OOP7
             G = Graphics.FromImage(bitmap);
             sheet.Image = bitmap;
             circuit = new RectangleF(sheet.Location.X - 11, sheet.Location.Y - 13, sheet.Width - 4, sheet.Height-2);
-            
+            openFileDialog1.Filter = "Text files(*.txt)|*.txt|All files(*.*)|*.*";
+            saveFileDialog1.Filter = "Text files(*.txt)|*.txt|All files(*.*)|*.*";
         }
 
         private void sheet_Paint(object sender, PaintEventArgs e)
@@ -302,79 +303,78 @@ namespace OOP7
 
         private void UnGroup_Click(object sender, EventArgs e)
         {
+            
             Storage DLCgroup = new Storage(S.getsize());
             for(int i = 0; i <S.getsize(); i++)
             {
-                if (S.obj[i] != null && S.obj[i].getSelect() == true && (S.obj[i] is CGroup))
+                if ((S.obj[i] is CGroup) && S.obj[i].getSelect() == true )
                 {
                     Storage shapes = new Storage(S.getsize());
                     shapes.obj = ((CGroup)S.obj[i]).Ungroup();
-                    for(int j = 0; j < shapes.getsize(); j++)
+                    for (int j = 0; j < shapes.getsize(); j++)
                     {
                         DLCgroup.addObject(shapes.obj[j]);
                     }
                     S.deleteObject(i);
+
                 }
             }
-            for(int i = 0; i < S.getsize(); i++)
+            for (int j = 0; j < S.getsize(); j++)
             {
-                S.addObject(DLCgroup.obj[i]);
+                S.addObject(DLCgroup.obj[j]);
             }
-            
+
         }
 
         public virtual void save(StreamWriter writer)
         {
             writer.WriteLine(this.Width.ToString());
             writer.WriteLine(this.Height.ToString());
-            writer.WriteLine(color);
+            writer.WriteLine("");
         }
 
         public virtual void load(StreamReader reader)
         {
             this.Width = int.Parse(reader.ReadLine());
             this.Height = int.Parse(reader.ReadLine());
-
-            switch (reader.ReadLine())
-            {
-                case "Yellow":
-                    {
-                        color = Color.Yellow;
-                        break;
-                    }
-                case "Blue":
-                    {
-                        color = Color.Blue;
-                        break;
-                    }
-                case "Black":
-                    {
-                        color = Color.Black;
-                        break;
-                    }
-            }
+            reader.ReadLine();
         }
 
         private void Save_Click(object sender, EventArgs e)
         {
-            S.SaveObject(pathToTheFileOfShapes);
-            using (StreamWriter writer = new StreamWriter(pathToTheFileOfFormsParams, false, System.Text.Encoding.Default))
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+            saveFileDialog1.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+            saveFileDialog1.Title = "Сохранение файла";
+            saveFileDialog1.ShowDialog();
+            if (saveFileDialog1.FileName != "")
             {
-                this.save(writer);
+                using (StreamWriter writer = new StreamWriter(saveFileDialog1.FileName, false, System.Text.Encoding.Default))
+                {
+                    this.save(writer);
+                    S.SaveObject(writer);
+                }
             }
         }
 
         private void Load_Click(object sender, EventArgs e)
         {
-            using (StreamReader reader = new StreamReader(pathToTheFileOfFormsParams, System.Text.Encoding.Default))
+            openFileDialog1.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+            openFileDialog1.FilterIndex = 2;
+            openFileDialog1.RestoreDirectory = true;
+            openFileDialog1.ShowDialog();
+            if (openFileDialog1.FileName != "openFileDialog1")
             {
-                this.load(reader);
+                using (StreamReader reader = new StreamReader(openFileDialog1.FileName, System.Text.Encoding.Default))
+                {
+                    this.load(reader);
+                    ObjectFactory factory = new MyObjectFactory();
+                    S = new Storage(100);
+                    S.loadShapes(reader, factory);
+                    this.Invalidate();
+                }
             }
 
-            ObjectFactory factory = new MyObjectFactory();
-            S = new Storage(100);
-            S.loadShapes(pathToTheFileOfShapes, factory);
-            this.Invalidate();
+            
         }
     }
 }

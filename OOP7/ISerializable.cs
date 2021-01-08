@@ -10,6 +10,6 @@ namespace OOP7
     public interface ISerializable
     {
         void save(StreamWriter writer);
-        void load(StreamReader reader);
+        void load(StreamReader reader, ObjectFactory factory);
     }
 }

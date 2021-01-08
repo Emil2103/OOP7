@@ -27,7 +27,7 @@ namespace OOP7
         protected int id;
         protected char code;
         public static int ID = 0;
-
+        protected bool MoveFlag = false;
         public virtual void DrawShape(Graphics G)
         {
             Pen pen = new Pen(color, 2);
@@ -43,6 +43,7 @@ namespace OOP7
         public virtual void ObjSize(int dx)
         {
             OValue = OValue + dx;
+            MoveFlag = false;
             createShape();
             if(!flag)
                 outOfBounds();
@@ -52,6 +53,7 @@ namespace OOP7
         {
             x = x + dx;
             y = y + dy;
+            MoveFlag = true;
             createShape();
             if(!flag)
                 outOfBounds();
@@ -70,14 +72,25 @@ namespace OOP7
                     PointF RightTop = new PointF(ShapeCircuit.Right, ShapeCircuit.Top);
                     PointF LeftBottom = new PointF(ShapeCircuit.Left, ShapeCircuit.Bottom);
                     PointF RightBottom = new PointF(ShapeCircuit.Right, ShapeCircuit.Bottom);
-                    if (!circuit.Contains(LeftTop) && !circuit.Contains(LeftBottom))
-                        ++x;
-                    if (!circuit.Contains(LeftTop) && !circuit.Contains(RightTop))
-                        ++y;
-                    if (!circuit.Contains(RightTop) && !circuit.Contains(RightBottom))
-                        --x;
-                    if (!circuit.Contains(LeftBottom) && !circuit.Contains(RightBottom))
-                        --y;
+                    if (MoveFlag)
+                    {
+                        if (!circuit.Contains(LeftTop) && !circuit.Contains(RightTop) && !circuit.Contains(LeftBottom) && !circuit.Contains(RightBottom))
+                            ObjSize(-1);
+                        if (!circuit.Contains(LeftTop) && !circuit.Contains(LeftBottom) && !circuit.Contains(RightTop) && !circuit.Contains(RightBottom))
+                            ObjSize(-1);
+                        if (!circuit.Contains(LeftTop) && !circuit.Contains(LeftBottom))
+                            ++x;
+                        if (!circuit.Contains(LeftTop) && !circuit.Contains(RightTop))
+                            ++y;
+                        if (!circuit.Contains(RightTop) && !circuit.Contains(RightBottom))
+                            --x;
+                        if (!circuit.Contains(LeftBottom) && !circuit.Contains(RightBottom))
+                            --y;
+                        
+                    }
+                    else
+                        ObjSize(-1);
+
                     createShape();
                 }
             }
@@ -128,7 +141,7 @@ namespace OOP7
             writingCommonParams(writer);
         }
 
-        public virtual void load(StreamReader reader)
+        public virtual void load(StreamReader reader, ObjectFactory factory)
         {
             readingCommonParams(reader);
             createShape();

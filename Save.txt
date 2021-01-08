@@ -1,0 +1,65 @@
+C
+RelocateFlag False
+Selected False
+Boarders:
+x 2
+y 0
+width 1056
+height 522
+
+OValue 50
+xShape 797
+yShape 80
+color Black
+C
+RelocateFlag False
+Selected False
+Boarders:
+x 2
+y 0
+width 1056
+height 522
+
+OValue 50
+xShape 600
+yShape 176
+color Black
+C
+RelocateFlag False
+Selected False
+Boarders:
+x 2
+y 0
+width 1056
+height 522
+
+OValue 50
+xShape 575
+yShape 322
+color Black
+C
+RelocateFlag False
+Selected False
+Boarders:
+x 2
+y 0
+width 1056
+height 522
+
+OValue 50
+xShape 830
+yShape 351
+color Black
+C
+RelocateFlag False
+Selected False
+Boarders:
+x 2
+y 0
+width 1056
+height 522
+
+OValue 50
+xShape 913
+yShape 227
+color Black

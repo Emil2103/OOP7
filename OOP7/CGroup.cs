@@ -23,7 +23,7 @@ namespace OOP7
             id = ID;
             ++ID;
             code = 'G';
-            
+            selected = true;
         }
 
         public CGroup(int maxcount)
@@ -34,7 +34,7 @@ namespace OOP7
             this.maxcount = maxcount;
             count = 0;
             Stor = new Storage(maxcount);
-            
+            selected = true;
               
         }
         ~CGroup()
@@ -68,19 +68,20 @@ namespace OOP7
 
         public override void Move(int dx, int dy)
         {
-            
+            MoveFlag = true;
             for (int i = 0; i < count; i++)
             {
-                    Stor.obj[i].Move(dx, dy);
+                 Stor.obj[i].Move(dx, dy);
             }
             outOfBounds();
         }
 
         public override void ObjSize(int dx)
         {
+            MoveFlag = false;
             for (int i = 0; i < count; i++)
             {
-                    Stor.obj[i].ObjSize(dx);
+                Stor.obj[i].ObjSize(dx);
             }
             outOfBounds();
         }
@@ -112,6 +113,11 @@ namespace OOP7
             for (int i = 0; i < count; i++)
                 Stor.obj[i].ChangeColor(color);
         }
+
+        public int getCount()
+        {
+            return count;
+        }
         
         public override void outOfBounds()
         {
@@ -119,21 +125,31 @@ namespace OOP7
             {
                 while (!CheckCircuit())
                 {
-                    RectangleF Rec = myPath.GetBounds();
-                    PointF LeftTop = Rec.Location;
-                    PointF RightTop = new PointF(Rec.Right, Rec.Top);
-                    PointF LeftBottom = new PointF(Rec.Left, Rec.Bottom);
-                    PointF RightBottom = new PointF(Rec.Right, Rec.Bottom);
-                    if (!circuit.Contains(LeftTop) && !circuit.Contains(LeftBottom))
-                        Move(1, 0);
-                    if (!circuit.Contains(LeftTop) && !circuit.Contains(RightTop))
-                        Move(0, 1);
-                    if (!circuit.Contains(RightTop) && !circuit.Contains(RightBottom))
-                        Move(-1, 0);
-                    if (!circuit.Contains(LeftBottom) && !circuit.Contains(RightBottom))
-                        Move(0, -1);
+                    if (MoveFlag)
+                    {
+                        RectangleF Rec = myPath.GetBounds();
+                        PointF LeftTop = Rec.Location;
+                        PointF RightTop = new PointF(Rec.Right, Rec.Top);
+                        PointF LeftBottom = new PointF(Rec.Left, Rec.Bottom);
+                        PointF RightBottom = new PointF(Rec.Right, Rec.Bottom);
+                        if (!circuit.Contains(LeftTop) && !circuit.Contains(RightTop) && !circuit.Contains(LeftBottom) && !circuit.Contains(RightBottom))
+                            ObjSize(-1);
+                        if (!circuit.Contains(LeftTop) && !circuit.Contains(LeftBottom) && !circuit.Contains(RightTop) && !circuit.Contains(RightBottom))
+                            ObjSize(-1);
+                        if (!circuit.Contains(LeftTop) && !circuit.Contains(LeftBottom))
+                            Move(1, 0);
+                        if (!circuit.Contains(LeftTop) && !circuit.Contains(RightTop))
+                            Move(0, 1);
+                        if (!circuit.Contains(RightTop) && !circuit.Contains(RightBottom))
+                            Move(-1, 0);
+                        if (!circuit.Contains(LeftBottom) && !circuit.Contains(RightBottom))
+                            Move(0, -1);
+                    }
+                    else
+                        ObjSize(-1);
                 }
-            }
+
+            } 
         }
 
         public override bool CheckCircuit()
@@ -179,15 +195,28 @@ namespace OOP7
             writer.WriteLine();
         }
 
-        public void loadGroup(StreamReader reader, ObjectFactory factory)
+
+        public override void load(StreamReader reader, ObjectFactory factory)
         {
             maxcount = int.Parse(extractInfo(reader.ReadLine()));
             Stor = new Storage(maxcount);
             count = int.Parse(extractInfo(reader.ReadLine()));
             flag = bool.Parse(extractInfo(reader.ReadLine()));
-            Stor.loadShapes(reader, factory);
-            for(int i =0; i < count; ++i)
+            Stor.readingShapes(reader, factory);
+            for (int i = 0; i < count; ++i)
                 this.circuit = Stor.obj[i].getCircuit();
         }
+
+
+        //public void loadGroup(StreamReader reader, ObjectFactory factory)
+        //{
+        //    maxcount = int.Parse(extractInfo(reader.ReadLine()));
+        //    Stor = new Storage(maxcount);
+        //    count = int.Parse(extractInfo(reader.ReadLine()));
+        //    flag = bool.Parse(extractInfo(reader.ReadLine()));
+        //    Stor.loadShapes(reader, factory);
+        //    for (int i = 0; i < count; ++i)
+        //        this.circuit = Stor.obj[i].getCircuit();
+        //}
     }
 }
